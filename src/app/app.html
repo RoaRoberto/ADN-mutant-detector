@@ -1,0 +1,47 @@
+<main class="container">
+  <header class="header">
+    <h1>🧬 Detector de Mutantes ADN</h1>
+    <p>Ingresa la secuencia de ADN para verificar si es mutante.</p>
+  </header>
+
+  <div class="content-wrapper">
+    <!-- Panel de Entrada -->
+    <section class="input-panel card">
+      <h2>1. Ingresa el ADN</h2>
+      <p class="hint">Escribe las secuencias separadas por comas (ej: ATGCGA, CAGTGC...)</p>
+      <textarea [(ngModel)]="ADNInput" placeholder="ATGCGA, CAGTGC, TTATGT, AGAAGG, CCCCTA, TCACTG" rows="5"></textarea>
+
+      <button (click)="analyze()" class="btn-analyze">
+        Analizar Secuencia
+      </button>
+
+      <div *ngIf="errorMessage()" class="alert error">
+        ⚠️ {{ errorMessage() }}
+      </div>
+    </section>
+
+    <!-- Visualización -->
+    <section class="visualization-panel card">
+      <h2>2. Visualización de la Matriz</h2>
+      <div class="matrix-grid" [style.--grid-size]="ADNMatrix().length">
+        <ng-container *ngFor="let row of ADNMatrix()">
+          <div *ngFor="let cell of row" class="ADN-cell" [attr.data-base]="cell">
+            {{ cell }}
+          </div>
+        </ng-container>
+      </div>
+    </section>
+  </div>
+
+  <!-- Resultado -->
+  <section *ngIf="result() !== null" class="result-panel card" [class.mutant]="result()" [class.human]="!result()">
+    <div class="result-content">
+      <span class="icon">{{ result() ? '👾' : '👤' }}</span>
+      <div class="text">
+        <h3>Resultado de Análisis</h3>
+        <p *ngIf="result()">¡Detección positiva! Se han encontrado múltiples secuencias mutantes.</p>
+        <p *ngIf="!result()">Análisis completado. El ADN corresponde a un ser humano.</p>
+      </div>
+    </div>
+  </section>
+</main>
